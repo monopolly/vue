@@ -1,0 +1,261 @@
+package vue
+
+//testing
+
+import (
+	"bytes"
+	"fmt"
+	"runtime"
+	"strings"
+	"testing"
+
+	"github.com/monopolly/file"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestAccount_Marshal(ggggg *testing.T) {
+	function, _, _, _ := runtime.Caller(0)
+	fn := runtime.FuncForPC(function).Name()
+	fn = fn[strings.LastIndex(fn, ".Test")+5:]
+	fn = strings.Join(strings.Split(fn, "_"), ": ")
+	fmt.Printf("\033[1;32m%s\033[0m\n", fn)
+
+	a := assert.New(ggggg)
+	_ = a
+
+	ccc := component{}
+	file.Save("complexCSSOut.css", ccc.cssByLines(optimizeCSS(complexCSS)))
+
+	return
+
+	Dir("test", "test/compiled.js", "test/compiled.css")
+
+	res := replaceClasses([]byte(`<div class="nice nice2 nice3" :class="{opra: true, 'lays': false}"></div>`), func(old string) (class string) {
+		fmt.Println(old)
+		if old == "nice" {
+			return "awesome"
+		}
+
+		if old == "lays" {
+			return "super"
+		}
+		if old == "opra" {
+			return "super"
+		}
+		return
+	})
+
+	fmt.Println(string(res))
+
+	bb := []byte(`
+	<template>
+    <div class="pizdec">
+        ну пиздец!!!
+    </div>
+</template>
+<script>
+export default {
+    data: function () {return {}},
+    props:['items', 'padding'],
+}
+</script>
+<style>
+.pizdec{
+    font-size:72px,
+}
+</style>
+	`)
+	/* html */
+	t1 := bytes.Index(bb, []byte("<template>"))
+	t2 := bytes.Index(bb[t1:], []byte("</template>"))
+	if t1 == -1 || t2 == -1 {
+		return
+	}
+
+	resp := bb[t1+len("<template>") : t2+1]
+	fmt.Println(string(resp))
+
+}
+
+func BenchmarkNew(bbbbbbbb *testing.B) {
+	bbbbbbbb.ReportAllocs()
+	bbbbbbbb.ResetTimer()
+	for n := 0; n < bbbbbbbb.N; n++ {
+
+	}
+}
+
+func BenchmarkGetFreeParallel(bbbbbbbb *testing.B) {
+	bbbbbbbb.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+
+		}
+	})
+}
+
+var complexCSS = []byte(`
+* {
+	box-sizing: border-box;
+  }
+  
+  @-webkit-keyframes ticker {
+	0% {
+	  -webkit-transform: translate3d(0, 0, 0);
+	  transform: translate3d(0, 0, 0);
+	  visibility: visible;
+	}
+	100% {
+	  -webkit-transform: translate3d(-100%, 0, 0);
+	  transform: translate3d(-100%, 0, 0);
+	}
+  }
+  @keyframes ticker {
+	0% {
+	  -webkit-transform: translate3d(0, 0, 0);
+	  transform: translate3d(0, 0, 0);
+	  visibility: visible;
+	}
+	100% {
+	  -webkit-transform: translate3d(-100%, 0, 0);
+	  transform: translate3d(-100%, 0, 0);
+	}
+  }
+  .ticker-wrap {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	overflow: hidden;
+	height: 4rem;
+	background-color: rgba(0, 0, 0, 0.9);
+	padding-left: 100%;
+	box-sizing: content-box;
+  }
+  .ticker-wrap .ticker {
+	display: inline-block;
+	height: 4rem;
+	line-height: 4rem;
+	white-space: nowrap;
+	padding-right: 100%;
+	box-sizing: content-box;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	animation-timing-function: linear;
+	-webkit-animation-name: ticker;
+	animation-name: ticker;
+	-webkit-animation-duration: 30s;
+	animation-duration: 30s;
+  }
+  .ticker-wrap .ticker__item {
+	display: inline-block;
+	padding: 0 2rem;
+	font-size: 2rem;
+	color: white;
+  }
+  
+  body {
+	padding-bottom: 5rem;
+  }
+  
+  h1, h2, p {
+	padding: 0 5%;
+  }
+  
+  `)
+
+var b = []byte(`
+<template>
+	<div class="auth">
+		<h1 class="ui header">Social login</h1>
+		<div v-if="$auth.isLoggedIn()">
+			<button class="ui button blue" @click="$auth.logout()">Logout</button>
+			<br>
+			{{ profile }}
+		</div>
+		<div v-if="!$auth.isLoggedIn()">
+			<p v-if="$route.query.referrer">Please log in first to continue.</p>
+			<p v-if="$route.query.error">An error occurred, please try again.</p>
+			<div class="ui stacked social-buttons">
+				<a v-for="provider in providers" :href="provider.URL"
+					:class="'ui labeled icon button fluid ' + provider.ID"><i
+						:class="'icon ' + provider.ID"></i>{{ provider.Name }}</a>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+	import * as util from '../util'
+	export default {
+		name: 'auth',
+		data() {
+			return {
+				providers: []
+			}
+		},
+		mounted() {
+			this.loadSocialAuths()
+			this.$watch(() => this.$auth.store.getters.user, (isLoggedIn) => {
+				this.loadSocialAuths()
+			})
+			if (this.$route.query.referrer) {
+				util.showError('Please log in first to continue')
+			}
+		},
+		methods: {
+			loadSocialAuths() {
+				if (!this.$auth.isLoggedIn()) {
+					var referrer = this.$route.fullPath
+					if (this.$route.query.referrer) {
+						referrer = this.$route.query.referrer
+					}
+					this.$auth.getAuthURLs(referrer)
+						.then(providers => {
+							this.providers = providers
+						}, e => {
+							util.showError(e)
+						})
+				}
+			},
+			logout() {
+				this.$auth.logout()
+			}
+		},
+		computed: {
+			loggedIn() {
+				return this.$auth.isLoggedIn()
+			},
+			profile() {
+				return this.$auth.getUser()
+			}
+		}
+	}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+	.auth {
+		width: 30em;
+		margin: 0 auto;
+	}
+
+	.social-buttons {
+		width: 10em;
+		margin: 0 auto;
+	}
+
+	.ui.button {
+		margin-bottom: 0.5em;
+		text-align: ;
+	}
+
+	.ui.google.button {
+		background-color: #4285F4;
+		color: #FFFFFF;
+	}
+
+	.ui.github.button {
+		background-color: #444444;
+		color: #FFFFFF;
+	}
+</style>`)

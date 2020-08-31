@@ -1,0 +1,27 @@
+@media only screen and (max-width: 500px) {
+    body {
+        background-color: lightblue;
+    }
+}
+
+@keyframes fly-1597394207 {
+    from {
+        left: -50vw;
+        bottom: -50vh;
+    }
+
+    to {
+        left: 100vw;
+        bottom: 100vh;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .pay-button {
+        border-radius: 8px;
+        margin: 5vw 0;
+        max-width: 90vw;
+    }
+
+    .pay-button h1;
+}
