@@ -1,3 +1,3 @@
 # vue
 
-Compile vue file component to js component.
+Golang compile vue file component to js component.
